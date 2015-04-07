@@ -1,0 +1,12 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenu.py b/usr/lib/linuxmint/mintMenu/mintMenu.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenu.py	2015-04-05 18:30:37.352536150 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenu.py	2015-04-05 20:01:40.608062862 -0600
+@@ -716,7 +716,7 @@ class MenuWin( object ):
+         about = Gtk.AboutDialog()
+         about.set_name("mintMenu")
+         import commands
+-        version = commands.getoutput("/usr/share/linuxmint/common/version.py mintmenu")
++        version = commands.getoutput("/usr/sbin/slapt-get -se mintmenu | grep 'inst=yes' | cut -d '-' -f2")
+         about.set_version(version)
+         try:
+             h = open('/usr/share/common-licenses/GPL','r')

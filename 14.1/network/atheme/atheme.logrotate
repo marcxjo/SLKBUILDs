@@ -1,0 +1,13 @@
+/var/log/atheme/*.log {
+	weekly
+	missingok
+	rotate 52
+	compress
+	delaycompress
+	notifempty
+	create 640 irc adm 
+	sharedscripts
+	postrotate
+		/etc/rc.d/rc.atheme reload >> /dev/null || exit 0
+	endscript
+}

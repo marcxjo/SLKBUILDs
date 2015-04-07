@@ -1,0 +1,54 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/applications.py b/usr/lib/linuxmint/mintMenu/plugins/applications.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 19:25:42.347647368 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 20:14:59.167162553 -0600
+@@ -990,7 +990,6 @@ class pluginclass( object ):
+             startupMenuItem = Gtk.CheckMenuItem(_("Launch when I log in"))
+             separator2 = Gtk.SeparatorMenuItem()
+             launchMenuItem = Gtk.MenuItem(_("Launch"))
+-            uninstallMenuItem = Gtk.MenuItem(_("Uninstall"))
+             deleteMenuItem = Gtk.MenuItem(_("Delete from menu"))
+             separator3 = Gtk.SeparatorMenuItem()
+             propsMenuItem = Gtk.MenuItem(_("Edit properties"))
+@@ -1006,10 +1005,6 @@ class pluginclass( object ):
+             mTree.append(separator2)
+ 
+             mTree.append(launchMenuItem)
+-            mTree.append(uninstallMenuItem)
+-            if home in widget.desktopFile:
+-                mTree.append(deleteMenuItem)
+-                deleteMenuItem.connect("activate", self.delete_from_menu, widget)
+ 
+             mTree.append(separator3)
+ 
+@@ -1022,7 +1017,6 @@ class pluginclass( object ):
+ 
+             launchMenuItem.connect( "activate", self.onLaunchApp, widget )
+             propsMenuItem.connect( "activate", self.onPropsApp, widget)
+-            uninstallMenuItem.connect ( "activate", self.onUninstallApp, widget )
+ 
+             if self.isLocationInFavorites( widget.desktopFile ):
+                 favoriteMenuItem.set_active( True )
+@@ -1286,10 +1280,6 @@ class pluginclass( object ):
+             self.buildFavorites()
+ 
+ 
+-    def onUninstallApp( self, menu, widget ):
+-        widget.uninstall()
+-        self.mintMenuWin.hide()
+-
+     def onFavoritesInsertSpace( self, menu, widget, insertBefore ):
+         if insertBefore:
+             self.favoritesAdd( self.favoritesBuildSpace(), widget.position )
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py b/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py	2015-04-05 18:12:10.842726925 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py	2015-04-05 20:17:37.510411375 -0600
+@@ -386,9 +386,6 @@ class ApplicationLauncher( easyButton ):
+             else:
+                 Execute(self.appExec, self.appPath)
+ 
+-    def uninstall (self, *args ):
+-        Execute("gksu /usr/share/linuxmint/common/mint-remove-application.py " + self.desktopFile)
+-
+     # IconTheme changed, setup new icons for button and drag 'n drop
+     def iconChanged( self ):
+         easyButton.iconChanged( self )

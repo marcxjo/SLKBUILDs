@@ -1,0 +1,40 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=pidgin-window_merge
+pkgver=20150407
+pkgrel=1mg
+source=("${pkgname}-${pkgver}.tar.gz")
+docs=('AUTHORS' 'BUGS' 'COPYING' 'CHANGELOG' 'NEWS' 'README' 'README.md' 'TODO')
+url=https://github.com/dm0-/window_merge
+options=('nosrcpack' 'noautodotnew')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"Window Merge (A Pidgin Single-Window Plugin à la Gajim)"
+"Window Merge is a Pidgin plugin that merges a conversation window with"
+"the Buddy List window. It can be used to achieve a rudimentary 'single"
+"window mode' for Pidgin. Both Window Merge and Pidgin itself should be"
+"kept updated for the most stable experience."
+""
+"This project was not written and is not maintained by Pidgin"
+"developers. The nature of this project can potentially destabilize"
+"Pidgin or its other plugins, so use it at your own risk."
+)
+
+build() {
+	cd ${startdir}/src/${pkgname}/
+
+	mkdir m4 || return 1
+	autoreconf -fi || return 1
+
+	./configure \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX} \
+	--localstatedir=/var \
+	--sysconfdir=/etc \
+	--mandir=/usr/man || return 1
+
+	make -j ${numjobs} || return 1
+	make install DESTDIR=${startdir}/pkg || return 1
+}

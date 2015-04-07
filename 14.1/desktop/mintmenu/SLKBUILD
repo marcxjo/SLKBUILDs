@@ -1,0 +1,112 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=mintmenu
+pkgver=5.6.0
+pkgrel=1mg
+arch=noarch
+source=("http://packages.linuxmint.com/pool/main/m/mintmenu/${pkgname}_${pkgver}.tar.gz" \
+	"mintmenu_remove-import-apt.patch" \
+	"salix-mintmenu_remove-apt-cache.patch" \
+	"salix-mintmenu_synaptics-to-slapt-tools.patch" \
+	"salix-mintmenu_datadir.patch" \
+	"salix-mintmenu_run-as-superuser.patch" \
+	"salix-mintmenu_executables.patch" \
+	"salix-mintmenu_change-locale-directory.patch" \
+	"salix-mintmenu_change-search-path-for-salix.patch" \
+	"salix-mintmenu_default-apps.patch" \
+	"salix-mintmenu_special-location.patch" \
+	"salix-mintmenu_recent-icon.patch" \
+	"salix-mintmenu_about.patch" \
+	"mintmenu_execute-fix.patch" \
+	"salix-mintmenu_remove_uninstall-entry.patch"\
+	"README.Salix")
+docs=("install" "copying" "changelog" "copyright" "README.Salix")
+url=http://community.linuxmint.com/software/view/mintmenu
+
+doinst() {
+# compile schemas
+if [ -x usr/bin/glib-compile-schemas ]; then
+	usr/bin/glib-compile-schemas usr/share/glib-2.0/schemas
+fi
+}
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"MintMenu (An Advanced Menu for the MATE Desktop)"
+"One of the most advanced menus under linux, MintMenu supports"
+"filtering, favorites, easy-uninstallation, autosession, and many other"
+"features."
+)
+
+
+build() {
+	# Get ready for this.
+	cd $startdir/src
+	mv *.patch $pkgname || exit 1
+	cd $pkgname
+
+	# Clean up Apt-related tools, replace with Slapt equivalents.
+	patch -p1 <mintmenu_remove-import-apt.patch || exit 1
+	patch -p1 <salix-mintmenu_remove-apt-cache.patch || exit 1
+	patch -p1 <salix-mintmenu_synaptics-to-slapt-tools.patch || exit 1
+
+	# This configuration is not required by the Salix packaging rules per se,
+	# but seriously, who packages icons under /usr/lib?
+	patch -p1 <salix-mintmenu_datadir.patch || exit 1
+
+	# Salix symlinks its sudo GUI backends to enable the gksu command.
+	patch -p1 <salix-mintmenu_run-as-superuser.patch || exit 1
+
+	# More path sane-ifying...
+	patch -p1 <salix-mintmenu_executables.patch || exit 1
+	patch -p1 <salix-mintmenu_change-locale-directory.patch || exit 1
+
+	# Salix-related links in the plugins.
+	patch -p1 <salix-mintmenu_change-search-path-for-salix.patch || exit 1
+
+	# Nativize default apps in the "Favorites" section.
+	patch -p1 <salix-mintmenu_default-apps.patch || exit 1
+
+	# Use Caja to open special URIs.
+	patch -p1 <salix-mintmenu_special-location.patch || exit 1
+
+	# Make sure the Recent icon renders with any iconset.
+	patch -p1 <salix-mintmenu_recent-icon.patch || exit 1
+
+	# Use a command that Salix can parse for version inquiry.
+	patch -p1 <salix-mintmenu_about.patch || exit 1
+
+	# Nested under the wrong conditional... I think.
+	patch -p1 <mintmenu_execute-fix.patch || exit 1
+
+	# This function is a bit redundant in the first place, and
+	# ultimately a bit dangerous if the user isn't 150% sure about what
+	# they're doing. Then again, most n00bs will not be using Salix in
+	# the first place. It shouldn't be too hard to patch for Slapt
+	# tools, but that's left as an exercise for the reader.
+	patch -p1 <salix-mintmenu_remove_uninstall-entry.patch || exit 1
+
+	# Create the directory tree for the package.
+	install -d -p $startdir/pkg/usr/bin/ || exit 1
+	install -m 755 -p usr/bin/mintmenu $startdir/pkg/usr/bin/mintmenu || exit 1
+	install -d -p $startdir/pkg/usr/share/linuxmint || exit 1
+	install -d -p $startdir/pkg/usr/share/linuxmint/mintMenu || exit 1
+	install -d -p $startdir/pkg/usr/share/linuxmint/mintMenu/plugins || exit 1
+	install -d -p $startdir/pkg/usr/share/dbus-1 || exit 1
+	install -d -p $startdir/pkg/usr/share/dbus-1/services || exit 1
+	install -d -p $startdir/pkg/usr/share/glib-2.0 || exit 1
+	install -d -p $startdir/pkg/usr/share/glib-2.0/schemas || exit 1
+	install -d -p $startdir/pkg/usr/share/mate-panel || exit 1
+	install -d -p $startdir/pkg/usr/share/mate-panel/applets || exit 1
+
+	# Move everything over into the proper directories.
+	install -m 644 -p usr/lib/linuxmint/mintMenu/*.* $startdir/pkg/usr/share/linuxmint/mintMenu/ || exit 1
+	rm -rf $startdir/pkg/usr/share/linuxmint/mintMenu/*.py || exit 1
+	install -m 755 -p usr/lib/linuxmint/mintMenu/*.py $startdir/pkg/usr/share/linuxmint/mintMenu/ || exit 1
+	install -m 644 -p usr/lib/linuxmint/mintMenu/plugins/* $startdir/pkg/usr/share/linuxmint/mintMenu/plugins/ || exit 1
+	install -m 755 -p usr/lib/linuxmint/mintMenu/plugins/*.py $startdir/pkg/usr/share/linuxmint/mintMenu/plugins/ || exit 1
+	install -m 644 -p usr/share/dbus-1/services/* $startdir/pkg/usr/share/dbus-1/services/ || exit 1
+	install -m 644 -p usr/share/glib-2.0/schemas/* $startdir/pkg/usr/share/glib-2.0/schemas/ || exit 1
+	install -m 644 -p usr/share/mate-panel/applets/* $startdir/pkg/usr/share/mate-panel/applets/ || exit 1
+} 

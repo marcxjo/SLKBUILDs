@@ -1,0 +1,37 @@
+InspIRCd is not intended to be installed or run as root. Without setting
+a (non-root) UID during the configuration stage, the installation phase
+of the SLKBUILD fails. Hence this steps outlined below need to be
+completed before even building InspIRCd.
+
+We'll follow the example of thenktor's Prosody configuration to get
+things set up cleanly and logically.
+
+1. Create a user/group pair, both named 'inspircd'. This user should be
+   a member of no group but 'inspircd'; the group should have no user
+   other than 'inspircd' as a member.
+2. Use the following commands to create additional needed directories:
+   mkdir -p -m750 /var/lib/inspircd
+   mkdir -p -m750 /var/run/inspircd
+   mkdir -p -m750 /var/log/inspircd
+3. Adjust the permissions on these groups accordingly:
+   chown inspircd:inspircd /var/lib/inspircd
+   chown inspircd:inspircd /var/run/inspircd
+   chown inspircd:inspircd /var/log/inspircd
+4. Finally, configure your installation by creating and appropriately
+   editing the file /etc/inspircd/inspircd.conf. The easiest way to do
+   this is to copy /etc/inspircd/examples/inspircd.conf.example up one
+   directory, edit it to your desired configuration, and remove the
+   ".example" suffix. (Keep in mind that there are other files to
+   configure from there, so this'll just give you the bare minimum to
+   get started... don't say I didn't warn you.)
+
+To make the first 3 steps easier, try the config-helper script included
+with this SLKBUILD. It handles all of those steps for you. Do note that,
+if you have already completed any (but not all) of the steps listed
+above, it will probably exit prematurely. At that point, you can either
+analyze the script and attempt to complete the remaining steps manually,
+or you can wait for me to stop slacking and set up every step as a
+conditional. Your mileage may vary if you choose the latter. ;-)
+
+Have fun! InspIRCd is painful to set it up, but it offers a fantastic
+IRC experience once you've got it all set. :-)

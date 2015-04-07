@@ -1,0 +1,12 @@
+diff --git a/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py b/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py
+index 37e9c23..073fb43 100755
+--- a/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py
++++ b/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
+ 
+-import apt, sys
++import sys #,apt
+ 
+ try:
+     cache = apt.Cache()    

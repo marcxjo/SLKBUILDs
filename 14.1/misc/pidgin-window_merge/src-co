@@ -1,0 +1,23 @@
+#!/bin/bash
+pkgname=pidgin-window_merge
+
+# Set pkgver to the current date.
+pkgver=$(date +%Y%m%d)
+git_dir=${pkgname}-${pkgver}
+if [ -d ${pkgname} ]; then
+	(
+	cd ${pkgname}
+	git pull --depth 1
+	)
+else
+	git clone --depth 1 https://github.com/dm0-/window_merge.git $git_dir
+fi
+
+# Create the source archive.
+tar czf $git_dir.src.tar.gz $git_dir
+
+# Remove the source directory.
+rm -rf $git_dir
+
+# Change the version the SLKBUILD to reflect our new target version.
+sed -i 's#^pkgver=.*#pkgver='$pkgver'#' SLKBUILD

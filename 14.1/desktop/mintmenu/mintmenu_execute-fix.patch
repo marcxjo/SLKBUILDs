@@ -1,0 +1,12 @@
+diff -upr mintmenu-orig/usr/lib/linuxmint/mintMenu/plugins/execute.py mintmenu/usr/lib/linuxmint/mintMenu/plugins/execute.py
+--- mintmenu-orig/usr/lib/linuxmint/mintMenu/plugins/execute.py	2014-01-20 21:02:06.700918000 +0100
++++ mintmenu/usr/lib/linuxmint/mintMenu/plugins/execute.py	2014-01-20 21:05:02.174672842 +0100
+@@ -33,7 +33,7 @@ def Execute( cmd , commandCwd=None):
+ 			except Exception, detail:
+ 				print detail
+ 				return False
+-		cmd = cmd.split()
++	cmd = cmd.split()
+ 	cmd = RemoveArgs(cmd)
+ 	
+ 	try:

@@ -1,0 +1,26 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/applications.py b/usr/lib/linuxmint/mintMenu/plugins/applications.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 18:53:06.628332475 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 19:24:14.281166628 -0600
+@@ -1384,14 +1384,14 @@ class pluginclass( object ):
+                 ButtonIcon = "mate-fs-network"
+ 
+             #For Special locations
+-            if location == "x-nautilus-desktop:///computer":
+-                location = "/usr/share/applications/nautilus-computer.desktop"
+-            elif location == "x-nautilus-desktop:///home":
+-                location =  "/usr/share/applications/nautilus-home.desktop"
+-            elif location == "x-nautilus-desktop:///network":
+-                location = "/usr/share/applications/network-scheme.desktop"
+-            elif location.startswith( "x-nautilus-desktop:///" ):
+-                location = "/usr/share/applications/nautilus-computer.desktop"
++            if ( location == "x-nautilus-desktop:///computer" or location == "x-caja-desktop:///computer" ):
++                location = "/usr/share/applications/caja-computer.desktop"
++            elif ( location == "x-nautilus-desktop:///home" or location == "x-caja-desktop:///home"):
++                location =  "/usr/share/applications/caja-home.desktop"
++            elif ( location == "x-nautilus-desktop:///network" or location == "x-caja-desktop:///network" ):
++                location = "/usr/share/applications/mate-network-scheme.desktop"
++            elif ( location.startswith( "x-nautilus-desktop:///") or location.startswith( "x-caja-desktop:///" )):
++                location = "/usr/share/applications/caja-computer.desktop"
+ 
+             if location.startswith( "file://" ):
+                 location = location[7:]

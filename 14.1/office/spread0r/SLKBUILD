@@ -1,0 +1,26 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=spread0r
+pkgver=20150407
+pkgrel=1mg
+source=("$pkgname-$pkgver.src.tar.gz")
+url=https://github.com/xypiie/spread0r
+docs=('LICENSE' 'README.md')
+options=('nosrcpack')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"spread0r (A text reader for speed reading)"
+"spread0r is a text reader which makes your reading twice as fast as"
+"usual."
+)
+
+build() {
+	mkdir -p $startdir/pkg/usr/bin $startdir/pkg/usr/doc/$pkgname-$pkgver
+
+	cd $startdir/src/$pkgname/
+	cp $pkgname.pl $startdir/pkg/usr/bin/
+	cp -r lib/ $startdir/pkg/usr/
+	cp -r books/ test/ $startdir/pkg/usr/doc/$pkgname-$pkgver
+}

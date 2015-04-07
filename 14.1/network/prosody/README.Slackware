@@ -1,0 +1,32 @@
+This readme was originally put together by Thorsten Muehlfelder; I just
+cleaned it up a bit.
+
+These are settings you'll want to complete before installing Prosody; it
+is always wise to isolate access to files for any server, and at the
+very least you definitely don't want to do something extremely stupid
+like run it as root.
+
+1. Create a user/group pair, both named 'prosody'. This user should be
+   a member of no group but 'prosody'; the group should have no user
+   other than 'prosody' as a member.
+2. Use the following commands to create additional needed directories:
+   mkdir -p -m750 /var/lib/prosody
+   mkdir -p -m750 /var/run/prosody
+   mkdir -p -m750 /var/log/prosody
+3. Adjust the permissions on these groups accordingly:
+   chown prosody:prosody /var/lib/prosody
+   chown prosody:prosody /var/run/prosody
+   chown prosody:prosody /var/log/prosody
+4. Finally, configure your installation by editing
+   /etc/prosody/prosody.cfg.lua.dist. Be sure to remove the ".dist" at
+   the end of the filename when you're finished.
+
+To make the first 3 steps easier, try the config-helper script included
+with this SLKBUILD. It handles all of those steps for you. Do note that,
+if you have already completed any (but not all) of the steps listed
+above, it will probably exit prematurely. At that point, you can either
+analyze the script and attempt to complete the remaining steps manually,
+or you can wait for me to stop slacking and set up every step as a
+conditional. Your mileage may vary if you choose the latter. ;-)
+
+Have fun, and happy Jabbering! :-)

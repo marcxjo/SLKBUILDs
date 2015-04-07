@@ -1,0 +1,255 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 17:32:03.233463772 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 17:47:52.210214809 -0600
+@@ -40,7 +40,7 @@ class mintMenuConfig( object ):
+ 
+         #i18n
+         self.mainWindow.set_title(_("Menu preferences"))
+-        self.mainWindow.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
++        self.mainWindow.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
+ 
+         self.builder.get_object("startWithFavorites").set_label(_("Always start with favorites pane"))
+         self.builder.get_object("showButtonIcon").set_label(_("Show button icon"))
+@@ -420,7 +420,7 @@ class mintMenuConfig( object ):
+         newPlaceDialog = self.builder.get_object( "editPlaceDialog" )
+         folderChooserDialog = self.builder.get_object( "fileChooserDialog" )
+         newPlaceDialog.set_transient_for(self.mainWindow)
+-        newPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
++        newPlaceDialog.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
+         newPlaceDialog.set_title(self.newPlaceDialogTitle)
+         folderChooserDialog.set_title(self.folderChooserDialogTitle)
+         newPlaceDialog.set_default_response(Gtk.ResponseType.OK)
+@@ -451,7 +451,7 @@ class mintMenuConfig( object ):
+         editPlaceDialog = self.builder.get_object( "editPlaceDialog" )
+         folderChooserDialog = self.builder.get_object( "fileChooserDialog" )
+         editPlaceDialog.set_transient_for(self.mainWindow)
+-        editPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
++        editPlaceDialog.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
+         editPlaceDialog.set_title(self.editPlaceDialogTitle)
+         folderChooserDialog.set_title(self.folderChooserDialogTitle)
+         editPlaceDialog.set_default_response(Gtk.ResponseType.OK)
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenu.py b/usr/lib/linuxmint/mintMenu/mintMenu.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenu.py	2014-09-30 05:19:50.000000000 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenu.py	2015-04-05 17:53:10.909666371 -0600
+@@ -69,7 +69,7 @@ class MainWindow( object ):
+ 
+         self.detect_desktop_environment()
+ 
+-        self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
++        self.icon = "/usr/share/linuxmint/mintMenu/visualisation-logo.png"
+ 
+         self.toggle = toggleButton
+         # Load UI file and extract widgets   
+@@ -716,7 +716,7 @@ class MenuWin( object ):
+         about = Gtk.AboutDialog()
+         about.set_name("mintMenu")
+         import commands
+-        version = commands.getoutput("/usr/lib/linuxmint/common/version.py mintmenu")
++        version = commands.getoutput("/usr/share/linuxmint/common/version.py mintmenu")
+         about.set_version(version)
+         try:
+             h = open('/usr/share/common-licenses/GPL','r')
+@@ -732,7 +732,7 @@ class MenuWin( object ):
+       #  about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
+         about.set_translator_credits(("translator-credits") )
+         #about.set_copyright( _("Based on USP from S.Chanderbally") )
+-        about.set_logo( GdkPixbuf.Pixbuf.new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg") )
++        about.set_logo( GdkPixbuf.Pixbuf.new_from_file("/usr/share/linuxmint/mintMenu/icon.svg") )
+         about.connect( "response", lambda dialog, r: dialog.destroy() )
+         about.show()
+ 
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/applications.py b/usr/lib/linuxmint/mintMenu/plugins/applications.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 16:31:06.813275118 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 17:56:15.317460845 -0600
+@@ -343,7 +343,7 @@ class pluginclass( object ):
+ #    def refresh_apt_cache(self):
+ #        if self.useAPT:
+ #            os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
+-#            os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
++#            os.system("/usr/share/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
+ 
+     def get_panel(self):
+         panelsettings = Gio.Settings.new("org.mate.panel")
+@@ -632,14 +632,14 @@ class pluginclass( object ):
+         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+         suggestionButton.connect("clicked", self.search_google)
+         suggestionButton.set_text(_("Search Google for %s") % text)
+-        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
++        suggestionButton.set_image("/usr/share/linuxmint/mintMenu/search_engines/google.ico")
+         self.applicationsBox.add(suggestionButton)
+         self.suggestions.append(suggestionButton)
+         
+         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+         suggestionButton.connect("clicked", self.search_wikipedia)
+         suggestionButton.set_text(_("Search Wikipedia for %s") % text)
+-        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
++        suggestionButton.set_image("/usr/share/linuxmint/mintMenu/search_engines/wikipedia.ico")
+         self.applicationsBox.add(suggestionButton)
+         self.suggestions.append(suggestionButton)
+                 
+@@ -655,7 +655,7 @@ class pluginclass( object ):
+         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+         suggestionButton.connect("clicked", self.search_dictionary)
+         suggestionButton.set_text(_("Lookup %s in Dictionary") % text)
+-        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png")
++        suggestionButton.set_image("/usr/share/linuxmint/mintMenu/search_engines/dictionary.png")
+         self.applicationsBox.add(suggestionButton)
+         self.suggestions.append(suggestionButton)  
+         
+@@ -834,7 +834,7 @@ class pluginclass( object ):
+                         else:
+                             shownList.append(i)
+                             showns = True
+-                if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
++                if (not showns and os.path.exists("/usr/share/linuxmint/mintInstall/icon.svg")):
+                     if len(text) >= 3:
+                         if self.current_suggestion is not None and self.current_suggestion in text:
+                             # We're restricting our search... 
+@@ -1047,14 +1047,14 @@ class pluginclass( object ):
+ 
+         menuItem = Gtk.ImageMenuItem(_("Search Google"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/google.ico')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_google)
+         menu.append(menuItem)
+         
+         menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/wikipedia.ico')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_wikipedia)
+         menu.append(menuItem)
+@@ -1064,7 +1064,7 @@ class pluginclass( object ):
+         
+         menuItem = Gtk.ImageMenuItem(_("Lookup Dictionary"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/dictionary.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_dictionary)
+         menu.append(menuItem)
+@@ -1081,35 +1081,35 @@ class pluginclass( object ):
+         
+         menuItem = Gtk.ImageMenuItem(_("Find Software"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/software.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/software.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_mint_software)
+         menu.append(menuItem)
+         
+         menuItem = Gtk.ImageMenuItem(_("Find Tutorials"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/tutorials.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/tutorials.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_mint_tutorials)
+         menu.append(menuItem)
+         
+         menuItem = Gtk.ImageMenuItem(_("Find Hardware"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/hardware.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/hardware.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_mint_hardware)
+         menu.append(menuItem)
+         
+         menuItem =Gtk.ImageMenuItem(_("Find Ideas"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/ideas.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/ideas.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_mint_ideas)
+         menu.append(menuItem)
+         
+         menuItem = Gtk.ImageMenuItem(_("Find Users"))
+         img = Gtk.Image()
+-        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/users.png')
++        img.set_from_file('/usr/share/linuxmint/mintMenu/search_engines/users.png')
+         menuItem.set_image(img)
+         menuItem.connect("activate", self.search_mint_users)
+         menu.append(menuItem)
+@@ -1184,7 +1184,7 @@ class pluginclass( object ):
+         try:
+             # Determine where the Desktop folder is (could be localized)
+             import sys, commands
+-            sys.path.append('/usr/lib/linuxmint/common')
++            sys.path.append('/usr/share/linuxmint/common')
+             from configobj import ConfigObj
+             config = ConfigObj(home + "/.config/user-dirs.dirs")
+             desktopDir = home + "/Desktop"
+@@ -1422,7 +1422,7 @@ class pluginclass( object ):
+             from user import home
+             if (not os.path.exists(home + "/.linuxmint/mintMenu/applications.list")):
+                 os.system("mkdir -p " + home + "/.linuxmint/mintMenu/applications")
+-                os.system("cp /usr/lib/linuxmint/mintMenu/applications.list " + home + "/.linuxmint/mintMenu/applications.list")
++                os.system("cp /usr/share/linuxmint/mintMenu/applications.list " + home + "/.linuxmint/mintMenu/applications.list")
+ 
+             applicationsFile = open ( os.path.join( os.path.expanduser( "~" ), ".linuxmint", "mintMenu", "applications.list" ), "r" )
+             applicationsList = applicationsFile.readlines()
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py b/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py	2014-09-30 05:19:50.000000000 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/easybuttons.py	2015-04-05 17:59:59.903561520 -0600
+@@ -387,7 +387,7 @@ class ApplicationLauncher( easyButton ):
+                 Execute(self.appExec, self.appPath)
+ 
+     def uninstall (self, *args ):
+-        Execute("gksu /usr/lib/linuxmint/common/mint-remove-application.py " + self.desktopFile)
++        Execute("gksu /usr/share/linuxmint/common/mint-remove-application.py " + self.desktopFile)
+ 
+     # IconTheme changed, setup new icons for button and drag 'n drop
+     def iconChanged( self ):
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/places.py b/usr/lib/linuxmint/mintMenu/plugins/places.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/places.py	2014-11-08 05:53:14.000000000 -0700
++++ b/usr/lib/linuxmint/mintMenu/plugins/places.py	2015-04-05 18:03:27.030927782 -0600
+@@ -177,7 +177,7 @@ class pluginclass( object ):
+             desktopDir = home + "/Desktop"
+             try:
+                 import sys
+-                sys.path.append('/usr/lib/linuxmint/common')
++                sys.path.append('/usr/share/linuxmint/common')
+                 from configobj import ConfigObj
+                 config = ConfigObj(home + "/.config/user-dirs.dirs")
+                 tmpdesktopDir = config['XDG_DESKTOP_DIR']
+diff -upr a/usr/share/dbus-1/services/org.mate.panel.applet.MintMenuAppletFactory.service b/usr/share/dbus-1/services/org.mate.panel.applet.MintMenuAppletFactory.service
+--- a/usr/share/dbus-1/services/org.mate.panel.applet.MintMenuAppletFactory.service	2014-09-30 05:19:50.000000000 -0600
++++ b/usr/share/dbus-1/services/org.mate.panel.applet.MintMenuAppletFactory.service	2015-04-05 18:04:51.219446272 -0600
+@@ -1,3 +1,3 @@
+ [D-BUS Service]
+ Name=org.mate.panel.applet.MintMenuAppletFactory
+-Exec=/usr/lib/linuxmint/mintMenu/mintMenu.py
++Exec=/usr/share/linuxmint/mintMenu/mintMenu.py
+diff -upr a/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml b/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml
+--- a/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml	2015-04-05 17:32:03.234463755 -0600
++++ b/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml	2015-04-05 18:07:48.926322566 -0600
+@@ -69,7 +69,7 @@
+     </key>
+     
+     <key type="s" name="applet-icon">
+-      <default>"/usr/lib/linuxmint/mintMenu/visualisation-logo.png"</default>
++      <default>"/usr/share/linuxmint/mintMenu/visualisation-logo.png"</default>
+       <summary></summary>
+       <description></description>
+     </key>
+diff -upr a/usr/share/mate-panel/applets/org.mate.panel.MintMenuApplet.mate-panel-applet b/usr/share/mate-panel/applets/org.mate.panel.MintMenuApplet.mate-panel-applet
+--- a/usr/share/mate-panel/applets/org.mate.panel.MintMenuApplet.mate-panel-applet	2014-03-18 05:50:00.000000000 -0600
++++ b/usr/share/mate-panel/applets/org.mate.panel.MintMenuApplet.mate-panel-applet	2015-04-05 18:10:03.928952579 -0600
+@@ -1,13 +1,13 @@
+ [Applet Factory]
+ Id=MintMenuAppletFactory
+ InProcess=false
+-Location=/usr/lib/linuxmint/mintMenu/mintMenu.py
++Location=/usr/share/linuxmint/mintMenu/mintMenu.py
+ Name=MintMenu Applet Factory
+ Description=Advanced Menu
+  
+ [MintMenuApplet]
+ Name=mintMenu
+ Description=Advanced Menu
+-Icon=/usr/lib/linuxmint/mintMenu/mint-logo.svg
++Icon=/usr/share/linuxmint/mintMenu/mint-logo.svg
+ MateComponentId=OAFIID:MATE_MintMenuApplet;
+ 

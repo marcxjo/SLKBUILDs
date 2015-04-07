@@ -1,0 +1,53 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=jappix
+pkgver=20150407
+pkgrel=1mg
+source=("../${pkgname}-${pkgver}.tar.gz")
+docs=('AUTHORS.md' 'CHANGELOG.md' 'COPYING.md' 'COPYING_FONT.md' 'COPYING_MINI.md' 'INSTALL.md' 'PROTOCOL.md' 'README.md' 'THANKS.md')
+url=https://jappix.com/
+options=('nosrcpack' 'noautodotnew')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"Jappix (Another way to think social networks!)"
+"Jappix is a new, smart and powerful social platform. We think each of"
+"us should own his own data, that’s why we’ve made Jappix"
+"decentralized. Jappix is one of the smartest free social networks. You"
+"can install it on your own server if you have one or join one of the"
+"existing installations. All of the Jappix servers are connected"
+"via the XMPP protocol. Therefore, you can also use a Jappix account"
+"with other software, as Gajim, Psi, iChat or Movim."
+)
+
+build() {
+	cd ${startdir}/src/${pkgname}-${pkgver}
+
+	# Wipe all those pesky git and apache files.
+	# N.B. Actually, *don't* get rid of the apache files if you're using
+	# httpd as your web server. This script was built with an nginx
+	# setup in mind.
+	rm -rf .git/ \
+	.gitignore \
+	tmp/cache/.gitkeep \
+	tmp/send/.gitkeep \
+	tmp/archives/.gitkeep \
+	tmp/avatar/.gitkeep || return 1
+
+	rm -f i18n/.htaccess \
+	app/.htaccess \
+	dev/.htaccess \
+	test/.htaccess \
+	log/.htaccess \
+	tmp/.htaccess \
+	tools/.htaccess || return 1
+
+	# Configure the path to your Jappix server.
+	# Note that this step is mandatory. C'mon, it's a simple edit.
+	jappixdir=path/to/jappix.myserver.com
+
+	# Aaaaaaaaaand go time!
+	install -d ${startdir}/pkg/${jappixdir}/jappix || return 1
+	cp -Rv ./ ${startdir}/pkg/${jappixdir}/jappix || return 1
+}

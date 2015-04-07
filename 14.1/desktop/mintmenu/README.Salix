@@ -1,0 +1,33 @@
+Credit goes to the Fedora Project MintMenu packager, Wolfgang Ulbrich,
+for the patches used in this build. The build process outlined in the
+Fedora spec file for MintMenu also provided the format for the build
+script in the SLKBUILD. In other words, credit goes to Wolfgang Ulbrich
+for creating a spotless packaging schematic for MintMenu, and to me for
+any typographical and/or technical errors involved in the delicate
+process of ripping it off.
+
+Any patches with filename "salix-{function}.patch" were modified to
+tailor the package for a Salix installation. (This does, however,
+include a few patches whose only issues were hunks that have become
+misplaced over the course of version updates. Even though none of them
+were far off enough to throw off patch's automagic guesswork,
+I updated these out of sheer pedantry, and modified the filenames to
+indicate clearly that these are *not* the Fedora originals, in case any
+breakage results from using my versions. It's not an ego thing,
+promise.)
+
+To be fair, I definitely didn't put nearly as much work into packaging
+this as Wolfgang did, and not even a fraction of the work the developers
+put into making this fantastic menu, but this was easily one of the more
+labor-intensive packages I've put together. If you appreciate this
+package, do me one of two favors:
+
+1) Drop me a line and let me know that it was helpful to have (see the
+email address in the SLKBUILD); that will give me some indication as to
+whether I should continue to update and improve this package. Failing
+that...
+
+2) At least look over the source and the patches and see if you can
+slick this up even more than I tried to. I wasn't really into this menu
+at first, but under the hood it clearly has gobs of potential,
+especially for a customized installation.

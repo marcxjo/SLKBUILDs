@@ -1,0 +1,12 @@
+/var/log/inspircd/* {
+        weekly
+        notifempty
+        missingok
+        create 0640 irc adm
+        rotate 12
+        compress
+        delaycompress
+        postrotate
+            /etc/rc.d/rc.inspircd reload >> /dev/null || exit 0
+        endscript
+}

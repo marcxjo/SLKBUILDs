@@ -1,0 +1,28 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=luasec
+pkgver=20150407
+pkgrel=1mg
+source=("$pkgname-$pkgver.src.tar.gz")
+url=https://github.com/brunoos/luasec
+options=("nosrcpack")
+docs=('CHANGELOG' 'INSTALL' 'LICENSE' 'README.md')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"LuaSec (SSL/TLS Support for the Lua Language)"
+"LuaSec is a binding for OpenSSL library to provide TLS/SSL"
+"communication. It takes an already established TCP connection and"
+"creates a secure session between the peers."
+)
+
+build() {
+	cd $startdir/src/$pkgname/
+	sed -i "s#LNX_CFLAGS=-O2\ #LNX_CFLAGS=-O2\ -march=i486\ -mtune=i686\ #" src/Makefile || return 1
+	make linux \
+	-j $numjobs || return 1
+
+	make install \
+	DESTDIR=$startdir/pkg || return 1
+}

@@ -1,0 +1,29 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=guayadeque
+pkgver=r1894
+pkgrel=1mg
+source=("${pkgname}-${pkgver}.src.tar.gz")
+docs=("changelog" "LICENSE" "README")
+url=http://www.guayadeque.org/
+options=(nosrcpack)
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"Guayadeque (The Linux Media Player)"
+"Guayadeque is a music management program designed for all music"
+"enthusiasts. It is Full Featured Linux media player that can easily"
+"manage large collections and uses the Gstreamer media framework."
+)
+
+build() {
+	cd ${startdir}/src/${pkgname}/
+	./buildt || return 1
+	cmake \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	. || return 1
+	make -j ${numjobs} || return 1
+	make install DESTDIR=${startdir}/pkg || return 1
+}

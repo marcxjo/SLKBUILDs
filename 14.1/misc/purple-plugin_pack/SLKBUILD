@@ -1,0 +1,38 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=purple-plugin-pack
+pkgver=2.7.0
+pkgrel=1mg
+source=("https://bitbucket.org/rekkanoryo/purple-plugin-pack/downloads/${pkgname}-${pkgver}.tar.gz")
+docs=('AUTHORS' 'COPYING' 'CHANGELOG' 'INSTALL' 'NEWS' 'README' 'quickhack.txt')
+url=https://bitbucket.org/rekkanoryo/purple-plugin-pack
+options=('nosrcpack' 'noautodotnew')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"The Purple Plugin Pack (Plugins for libpurple-based IM Clients)"
+"The Purple Plugin Pack was originally created by Gary Kramlich and Stu"
+"Tomlinson as a way to distribute their ever growing lists of simple"
+"Pidgin plugins. It has since grown from its origins of about 6 plugins"
+"to over 50."
+""
+"Also, many more developers have continued to add to it, including John"
+"Bailey, Peter Lawler, Sadrul Habib Chowdhury, Richard Laager, and Paul"
+"Aurich. It has also become a place to save plugins whose authors have"
+"since abandoned them."
+)
+
+build() {
+	cd ${startdir}/src/${pkgname}-${pkgver}/
+
+	PYTHON=/usr/bin/python2 ./configure \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX} \
+	--localstatedir=/var \
+	--sysconfdir=/etc \
+	--mandir=/usr/man || return 1
+
+	make -j ${numjobs} || return 1
+	make install DESTDIR=${startdir}/pkg || return 1
+}

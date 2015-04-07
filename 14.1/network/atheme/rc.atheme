@@ -1,0 +1,76 @@
+#! /bin/sh
+#
+# Atheme Services start script
+#
+
+### BEGIN INIT INFO
+# Provides:          atheme
+# Required-Start:    $syslog $remote_fs
+# Required-Stop:     $time ypbind sendmail
+# Should-Start:      $syslog $remote_fs
+# Should-Stop:       $time ypbind sendmail
+# Default-Start:     2 3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: Starts Atheme Services
+# Description:       Starts the Atheme IRC Service Transport
+### END INIT INFO
+# GPL Licensed
+
+ATHEME="/usr/bin/atheme-services"
+ATHEMEPID=`cat /var/run/atheme/atheme.pid`
+PIDDIR="/var/run/atheme"
+NAME="atheme"
+
+test -e $ATHEME || exit 0
+
+start()
+{
+mkdir $PIDDIR -p
+chown atheme:atheme $PIDDIR
+chmod 750 $PIDDIR
+
+    $ATHEME >> /dev/null
+}
+
+stop()
+{
+    kill -TERM $ATHEMEPID >> /dev/null
+    rm -f $ATHEMEPID
+}
+
+restart()
+{
+	kill -INT $ATHEMEPID >> /dev/null
+}
+
+rehash()
+{
+	kill -HUP $ATHEMEPID >> /dev/null
+}
+
+case "$1" in
+    start)
+echo -n "Starting Atheme Services..."
+start &
+    ;;
+    stop)
+echo -n "Stopping Atheme Services..."
+stop &
+    ;;
+     restart)
+echo -n "Restarting Atheme Services..."
+restart &
+    ;;
+    *)
+echo "Usage: $0 {start|stop|restart|rehash}" >&2
+exit 1
+    ;;
+esac
+
+if [ $? -eq 0 ]; then
+    echo .
+else
+    echo " failed!"
+fi
+
+exit 0

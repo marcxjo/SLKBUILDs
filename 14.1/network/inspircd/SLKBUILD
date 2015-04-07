@@ -1,0 +1,74 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=inspircd
+pkgver=2.0.16
+pkgrel=1mg
+source=("${pkgname}-${pkgver}.tar.gz" "rc.inspircd" "config-helper.sh" "inspircd.logrotate" "ircdconf.patch" "moduleconf.patch" "README.Slackware")
+docs=('config-helper.sh' 'COPYING' 'README.md' 'README.Slackware' 'rfc1035.txt' 'rfc1413.txt' 'rfc1459.txt')
+url=http://www.inspircd.org/
+options=('nosrcpack' 'noautodotnew')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"InspIRCd (A Set of Services for IRC Networks)"
+"InspIRCd is a modular Internet Relay Chat (IRC) server written in C++"
+"for Linux, BSD, Windows and Mac OS X systems which was created from"
+"scratch to be stable, modern and lightweight."
+""
+"As InspIRCd is one of the few IRC servers written from scratch, it"
+"avoids a number of design flaws and performance issues that plague"
+"other more established projects, such as UnrealIRCd, while providing"
+"the same level of feature parity."
+)
+
+build() {
+	#
+	cd ${startdir}/src/${pkgname}-${pkgver}/
+	daemonid=`id -u inspircd`
+
+	#Enable the few extras we care about:
+	./configure \
+	--enable-extras=m_geoip.cpp \
+	--enable-extras=m_regex_posix.cpp \
+	--enable-extras=m_regex_pcre.cpp \
+	--enable-extras=m_sqlite3.cpp \
+	--enable-extras=m_ssl_openssl.cpp || return 1
+
+	#Configure the install:
+	./configure \
+	--disable-interactive \
+	--uid=${daemonid} \
+	--prefix=/usr/lib${LIBDIRSUFFIX}/${pkgname} \
+	--config-dir=/etc/${pkgname} \
+	--module-dir=/usr/lib${LIBDIRSUFFIX}/${pkgname}/modules \
+	--binary-dir=/usr/bin \
+	--data-dir=/var/lib${LIBDIRSUFFIX}/${pkgname} \
+	--log-dir=/var/log/${pkgname} \
+	--enable-openssl \
+	--enable-epoll || return 1
+
+	#Aaaaaand go time!
+	make -j ${numjobs} || return 1
+	make install DESTDIR=${startdir}/pkg || return 1
+
+	cd ${startdir}/src
+
+	# Patch the config file:
+	patch ${startdir}/pkg/etc/${pkgname}/examples/${pkgname}.conf.example <ircdconf.patch || return 1
+
+	# Patch the config file:
+	patch ${startdir}/pkg/etc/${pkgname}/examples/modules.conf.example <moduleconf.patch || return 1
+
+	# Install the init script:
+	install -D -m755 rc.inspircd ${startdir}/pkg/etc/rc.d/rc.inspircd || return 1
+
+	# Install the logrotate script:
+	install -Dm 644 inspircd.logrotate ${startdir}/pkg/etc/logrotate.d/inspircd || return 1
+
+	cd ${startdir}/pkg
+	
+	# Delete the "default" data and log directories:
+	rm -rf ${pkgdir}/usr/lib/inspircd/logs || return 1
+	rm -rf ${pkgdir}/usr/lib/inspircd/data || return 1
+}

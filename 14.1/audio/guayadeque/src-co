@@ -1,0 +1,28 @@
+#!/bin/bash
+pkgname=guayadeque
+
+# Retrieve the revision given on command line; otherwise just grab the
+#latest revision.
+svn_rev=${1:-""}
+# A few variables for the checkout command.
+svn_dir=${pkgname}
+svn_url=https://svn.code.sf.net/p/${svn_dir}/code/Trunk
+
+# Aaaaand let's rock!
+svn_cmd=" co"
+# Grab the revision indicated by $svn_rev if the variable has been set.
+[ ! -z $svn_rev ] && svn_cmd="$svn_cmd -r $svn_rev"
+# Set $pkgver to the downloaded revision.
+cur_rev=$(svn $svn_cmd $svn_url $svn_dir 2>svn_err.log | tail -1 |tr -c -d "[:digit:]")
+pkgver="r${cur_rev}"
+
+# Create the source archive.
+svn_dir=${pkgname}-${pkgver}
+mv $pkgname $svn_dir
+tar -czf $svn_dir.src.tar.gz $svn_dir
+
+# Remove the source directory.
+rm -r $svn_dir
+
+# Change the version the SLKBUILD to reflect our new target version.
+sed -i 's#^pkgver=.*#pkgver='$pkgver'#' SLKBUILD

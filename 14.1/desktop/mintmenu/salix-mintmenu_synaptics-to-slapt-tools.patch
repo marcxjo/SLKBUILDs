@@ -1,0 +1,149 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenuConfig.glade b/usr/lib/linuxmint/mintMenu/mintMenuConfig.glade
+--- a/usr/lib/linuxmint/mintMenu/mintMenuConfig.glade	2015-04-05 16:31:06.812275134 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenuConfig.glade	2015-04-05 16:57:27.972854598 -0600
+@@ -1906,8 +1906,8 @@
+                                     <property name="visible">True</property>
+                                     <property name="can_focus">False</property>
+                                     <child>
+-                                      <object class="GtkCheckButton" id="softwaremanagercheckbutton">
+-                                        <property name="label" translatable="yes">Software Manager</property>
++                                      <object class="GtkCheckButton" id="packagemanagercheckbutton">
++                                        <property name="label" translatable="yes">Gslapt Package Manager</property>
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">True</property>
+                                         <property name="receives_default">False</property>
+@@ -1921,8 +1921,8 @@
+                                       </packing>
+                                     </child>
+                                     <child>
+-                                      <object class="GtkCheckButton" id="packagemanagercheckbutton">
+-                                        <property name="label" translatable="yes">Package Manager</property>
++                                      <object class="GtkCheckButton" id="slackbuildmanagercheckbutton">
++                                        <property name="label" translatable="yes">Sourcery SlackBuild Manager</property>
+                                         <property name="visible">True</property>
+                                         <property name="can_focus">True</property>
+                                         <property name="receives_default">False</property>
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 16:31:06.813275118 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 17:07:07.872008186 -0600
+@@ -102,8 +102,8 @@ class mintMenuConfig( object ):
+         self.builder.get_object("allowscrollbarcheckbutton1").set_label(_("Allow Scrollbar"))
+         self.builder.get_object("systemHeightEntryLabel").set_text(_("Height:"))
+         self.builder.get_object("defaultItemsFrameLabel").set_text(_("Toggle Default Items:"))
+-        self.builder.get_object("softwaremanagercheckbutton").set_label(_("Software Manager"))
+-        self.builder.get_object("packagemanagercheckbutton").set_label(_("Package Manager"))
++        self.builder.get_object("packagemanagercheckbutton").set_label(_("Gslapt Package Manager"))
++        self.builder.get_object("slackbuildmanagercheckbutton").set_label(_("Sourcery SlackBuild Manager"))
+         self.builder.get_object("controlcentercheckbutton").set_label(_("Control Center"))
+         self.builder.get_object("terminalcheckbutton").set_label(_("Terminal"))
+         self.builder.get_object("lockcheckbutton").set_label(_("Lock Screen"))
+@@ -171,8 +171,8 @@ class mintMenuConfig( object ):
+         if (self.allowPlacesScrollbarToggle.get_active() == False):
+             self.placesHeightButton.set_sensitive(False)
+         self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
+-        self.softwareManagerToggle = self.builder.get_object( "softwaremanagercheckbutton" )
+         self.packageManagerToggle = self.builder.get_object( "packagemanagercheckbutton" )
++        self.slackbuildManagerToggle = self.builder.get_object( "slackbuildmanagercheckbutton" )
+         self.controlCenterToggle = self.builder.get_object( "controlcentercheckbutton" )
+         self.terminalToggle = self.builder.get_object( "terminalcheckbutton" )
+         self.lockToggle = self.builder.get_object( "lockcheckbutton" )
+@@ -182,10 +182,6 @@ class mintMenuConfig( object ):
+         self.systemHeightButton = self.builder.get_object( "systemHeightSpinButton" )
+         if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
+         self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
+-        if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+-            self.builder.get_object( "softwaremanagercheckbutton" ).show()
+-        else:
+-            self.builder.get_object( "softwaremanagercheckbutton" ).hide()
+ 
+         self.builder.get_object( "closeButton" ).connect("clicked", Gtk.main_quit )
+ 
+@@ -240,8 +236,8 @@ class mintMenuConfig( object ):
+         self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "allow-scrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
+         self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-gtk-bookmarks", self.showgtkbookmarksToggle, "toggled", self.showgtkbookmarksToggle.set_active, self.showgtkbookmarksToggle.get_active )
+ 
+-        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-software-manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
+         self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-package-manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
++        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-slackbuild-manager", self.slackbuildManagerToggle, "toggled", self.slackbuildManagerToggle.set_active, self.slackbuildManagerToggle.get_active )
+         self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-control-center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
+         self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
+         self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-lock-screen", self.lockToggle, "toggled", self.lockToggle.set_active, self.lockToggle.get_active )
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/system_management.py b/usr/lib/linuxmint/mintMenu/plugins/system_management.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/system_management.py	2014-09-30 05:19:50.000000000 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/system_management.py	2015-04-05 17:23:18.758401786 -0600
+@@ -52,8 +52,8 @@ class pluginclass( object ):
+         self.settings.notifyAdd( "show-control-center", self.RegenPlugin )
+         self.settings.notifyAdd( "show-lock-screen", self.RegenPlugin )
+         self.settings.notifyAdd( "show-logout", self.RegenPlugin )
++        self.settings.notifyAdd( "show-slackbuild-manager", self.RegenPlugin )
+         self.settings.notifyAdd( "show-package-manager", self.RegenPlugin )
+-        self.settings.notifyAdd( "show-software-manager", self.RegenPlugin )
+         self.settings.notifyAdd( "show-terminal", self.RegenPlugin )
+         self.settings.notifyAdd( "show-quit", self.RegenPlugin )
+         self.settings.notifyAdd( "allow-scrollbar", self.RegenPlugin )
+@@ -106,8 +106,8 @@ class pluginclass( object ):
+ 
+         # Check toggles
+ 
+-        self.showSoftwareManager = self.settings.get( "bool", "show-software-manager")
+         self.showPackageManager = self.settings.get( "bool", "show-package-manager")
++        self.showSlackBuildManager = self.settings.get( "bool", "show-slackbuild-manager")
+         self.showControlCenter = self.settings.get( "bool", "show-control-center")
+         self.showTerminal = self.settings.get( "bool", "show-terminal")
+         self.showLockScreen = self.settings.get( "bool", "show-lock-screen")
+@@ -131,20 +131,19 @@ class pluginclass( object ):
+     #Add standard items
+     def do_standard_items( self ):
+ 
+-        if ( self.showSoftwareManager == True ):
+-            if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+-                Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software Manager")], -1, -1 )
+-                Button1.connect( "clicked", self.ButtonClicked, "gksu mintinstall" )
+-                Button1.show()
+-                self.systemBtnHolder.pack_start( Button1, False, False, 0)
+-                self.mintMenuWin.setTooltip( Button1, _("Browse and install available software") )
+-
+         if ( self.showPackageManager == True ):
+-            Button2 = easyButton( "applications-system", self.iconsize, [_("Package Manager")], -1, -1 )
+-            Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/synaptic" )
++            Button1 = easyButton( "gslapt", self.iconsize, [_("Gslapt Package Manager")], -1, -1 )
++            Button1.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/gslapt" )
++            Button1.show()
++            self.systemBtnHolder.pack_start( Button1, False, False, 0 )
++            self.mintMenuWin.setTooltip( Button1, _("Install, remove and upgrade software packages") )
++
++        if ( self.showSlackBuildManager == True ):
++            Button2 = easyButton( "sourcery", self.iconsize, [_("Sourcery SlackBuild Manager")], -1, -1 )
++            Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/sourcery" )
+             Button2.show()
+             self.systemBtnHolder.pack_start( Button2, False, False, 0 )
+-            self.mintMenuWin.setTooltip( Button2, _("Install, remove and upgrade software packages") )
++            self.mintMenuWin.setTooltip( Button2, _("A graphical frontend to slapt-src") )
+ 
+         if ( self.showControlCenter == True ):
+             Button3 = easyButton( "gtk-preferences", self.iconsize, [_("Control Center")], -1, -1 )
+diff -upr a/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml b/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml
+--- a/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml	2015-04-05 16:31:06.813275118 -0600
++++ b/usr/share/glib-2.0/schemas/com.linuxmint.mintmenu.gschema.xml	2015-04-05 17:28:32.551051498 -0600
+@@ -341,18 +341,18 @@
+       <description></description>
+     </key>
+ 
+-    <key type="b" name="show-software-manager">
++    <key type="b" name="show-package-manager">
+       <default>true</default>
+       <summary></summary>
+       <description></description>
+     </key>
+ 
+-    <key type="b" name="show-package-manager">
++    <key type="b" name="show-slackbuild-manager">
+       <default>true</default>
+       <summary></summary>
+       <description></description>
+     </key>
+-
++    
+     <key type="b" name="show-control-center">
+       <default>true</default>
+       <summary></summary>

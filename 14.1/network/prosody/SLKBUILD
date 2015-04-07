@@ -1,0 +1,67 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+#Former Packager: Thorsten Muehlfelder <thenktor~ĉe~gmx~dot~de>
+
+pkgname=prosody
+pkgver=0.10nightly74
+pkgrel=1mg
+source=("https://prosody.im/nightly/0.10/build74/${pkgname}-0.10-1nightly74.tar.gz" "rc.prosody" "prosody.logrotate" "README.Slackware" "config-helper.sh")
+docs=('AUTHORS' 'COPYING' 'DEPENDS' 'HACKERS' 'INSTALL' 'README' 'README.Slackware' 'TODO' 'config-helper.sh' 'coding_style.txt' 'names.txt' 'roster_format.txt' 'session.txt' 'stanza.txt' 'stanza_routing.txt')
+url=https://www.prosody.im/
+options=('nosrcpack' 'noautodotnew')
+
+#x-category=network
+#x-depends=lua,lua-filesystem,lua-zlib,luadbi,luaevent,luaexpat,luasec,luasocket
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"Prosody (A Lightweight Jabber/XMPP Server)"
+"Prosody is a flexible communications server for Jabber/XMPP written in"
+"Lua. It aims to be easy to use, and light on resources. For developers"
+"it aims to be easy to extend and give a flexible system on which to"
+"rapidly develop added functionality, or prototype new protocols."
+"Prosody is licensed under the permissive MIT/X11 license."
+""
+"Make sure you read the included documentation detailing how to"
+"configure your system for Prosody in /usr/doc/$pkgname-$pkgver/."
+"A script is included to automate the setup process."
+)
+
+build() {
+	# Note that this script assumes that you want to install a nightly
+	# build of Prosody 0.10. You'll have to make modify the corresponding
+	# entry in the source array as well as $pkgver and this next line
+	# if you prefer to use a 0.9 or trunk build. 
+	cd ${startdir}/src/${pkgname}-0.10-1nightly74/
+	./configure \
+	--ostype=linux \
+	--prefix=/usr \
+	--sysconfdir=/etc/prosody \
+	--datadir=/var/lib/prosody \
+	--with-lua=/usr \
+	--with-lua-include=/usr/include \
+	--with-lua-lib=/usr/lib${LIBDIRSUFFIX} \
+	--require-config || return 1
+	make clean; make -j ${numjobs} || return 1
+	make install DESTDIR=${startdir}/pkg || return 1
+
+	# Remove the default config file and any default SSL certs... you'll appreciate this if you're just upgrading. X-D
+	# (Apparently Prosody typically adds a suffix to the enclosed config now, but I believe in due diligence.)
+	rm ${startdir}/pkg/etc/prosody/prosody.cfg.lua || return 1
+	rm ${startdir}/pkg/etc/prosody/certs/* || return 1
+
+	# Remove the data directory; we create this by hand with the config-helper script.
+	rm -r ${startdir}/pkg/var/ || return 1
+
+	# Copy over the example config file; edit appropriately, remove .example suffix, go nuts.
+	install -m644 prosody.cfg.lua.dist ${startdir}/pkg/etc/prosody/ || return 1
+
+	cd ${startdir}/src/
+
+	# Install the rc script.
+	install -Dm755 rc.prosody ${startdir}/pkg/etc/rc.d/rc.prosody || return 1
+
+	# Install the logrotate script based on Maranda's from Metronome.
+	# Credit goes to thenktor for building this nifty trick into his script; Maranda for creating a more detailed script.
+	install -Dm 644 prosody.logrotate ${startdir}/pkg/etc/logrotate.d/prosody || return 1
+}

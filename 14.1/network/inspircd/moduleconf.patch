@@ -1,0 +1,23 @@
+diff -Nuar a/modules.conf.example b/modules.conf.example
+--- a/modules.conf.example	2014-04-06 08:28:11.000000000 -0600
++++ b/modules.conf.example	2014-04-28 01:14:36.318971308 -0600
+@@ -1349,8 +1349,8 @@
+ #
+ # If 'listmodes' is true then all list modes (+b, +I, +e, +g...) will be
+ # saved. Defaults to false.
+-#<permchanneldb filename="data/permchannels.conf" listmodes="true">
+-#<include file="data/permchannels.conf">
++#<permchanneldb filename="/var/lib/inspircd/permchannels.conf" listmodes="true">
++#<include file="/var/lib/inspircd/permchannels.conf">
+ #
+ # You may also create channels on startup by using the <permchannels> block.
+ # Don't forget to set them +P in the modes, or they won't stay permanent.
+@@ -1858,7 +1858,7 @@
+ #<module name="m_xline_db.so">
+ 
+ # Specify the filename for the xline database here.
+-#<xlinedb filename="data/xline.db">
++#<xlinedb filename="/var/lib/inspircd/xline.db">
+ 
+ #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+ #    ____                _   _____ _     _       ____  _ _   _        #

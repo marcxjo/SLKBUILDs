@@ -1,0 +1,88 @@
+#! /bin/sh
+#
+# InspIRCd start script
+#
+
+### BEGIN INIT INFO
+# Provides:          inspircd
+# Required-Start:    $network $syslog $time
+# Required-Stop:     $syslog
+# Should-Start:      $local_fs
+# Should-Stop:       $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start InspIRCd
+# Description:       Starts InspIRCd, the Greatest IRC Server Known to Man
+### END INIT INFO
+# GPL Licensed
+
+INSPIRCD="/usr/lib/inspircd/inspircd"
+PIDDIR="/var/run/inspircd"
+NAME="inspircd"
+
+test -e $INSPIRCD || exit 0
+
+start()
+{
+mkdir $PIDDIR -p
+chown inspircd:inspircd $PIDDIR
+chmod 750 $PIDDIR
+
+    $INSPIRCD cron >> /dev/null
+}
+
+stop()
+{
+    $INSPIRCD stop >> /dev/null
+    rm -f $PIDDIR/$NAME.pid
+}
+
+restart()
+{
+	$INSPIRCD restart >> /dev/null
+}
+
+reload()
+{
+	$INSPIRCD reload >> /dev/null
+}
+
+status()
+{
+	$INSPIRCD status
+	[ $? = 0 ]
+}
+
+case "$1" in
+    start)
+echo -n "Starting InspIRCd..."
+start &
+    ;;
+    stop)
+echo -n "Stopping InspIRCd..."
+stop &
+    ;;
+    restart)
+echo -n "Restarting InspIRCd..."
+restart &
+    ;;
+     reload)
+echo -n "Reloading InspIRCd..."
+reload &
+    ;;
+    status)
+status &
+    ;;
+    *)
+echo "Usage: $0 {start|stop|restart|reload|status}" >&2
+exit 1
+    ;;
+esac
+
+if [ $? -eq 0 ]; then
+    echo .
+else
+    echo " failed!"
+fi
+
+exit 0

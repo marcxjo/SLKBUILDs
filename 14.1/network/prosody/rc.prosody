@@ -1,0 +1,84 @@
+#! /bin/sh
+#
+# Prosody XMPP Server Start Script
+#
+
+### BEGIN INIT INFO
+# Provides: prosody
+# Required-Start: $remote_fs $network $named $time
+# Required-Stop: $remote_fs $network $named $time
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Starts Prosody XMPP Server
+# Description: Starts Prosody, an XMPP server written in Lua.
+### END INIT INFO
+
+PROSODY=/usr/bin/prosodyctl
+PIDDIR=/var/run/prosody
+NAME=prosody
+
+test -e $PROSODY || exit 0
+
+start()
+{
+mkdir $PIDDIR -p
+chown prosody:prosody $PIDDIR
+chmod 750 $PIDDIR
+
+    $PROSODY start >> /dev/null
+}
+
+stop()
+{
+    $PROSODY stop >> /dev/null
+}
+
+restart()
+{
+    $PROSODY restart >> /dev/null
+}
+
+reload()
+{
+    $PROSODY reload >> /dev/null
+}
+
+status()
+{
+    $PROSODY status
+    [ $? = 0 ]
+}
+
+case "$1" in
+    start)
+echo -n "Starting Prosody..."
+start &
+    ;;
+    stop)
+echo -n "Stopping Prosody..."
+stop &
+    ;;
+    restart)
+echo -n "Restarting Prosody..."
+restart &
+    ;;
+     reload)
+echo -n "Reloading Prosody..."
+reload &
+    ;;
+    status)
+status &
+    ;;
+    *)
+echo "Usage: $0 {start|stop|restart|reload|status}" >&2
+exit 1
+    ;;
+esac
+
+if [ $? -eq 0 ]; then
+    echo " done."
+else
+    echo " failed!"
+fi
+
+exit 0

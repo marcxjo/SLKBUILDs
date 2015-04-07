@@ -1,0 +1,30 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/applications.list b/usr/lib/linuxmint/mintMenu/applications.list
+--- a/usr/lib/linuxmint/mintMenu/applications.list	2014-05-22 04:06:53.000000000 -0600
++++ b/usr/lib/linuxmint/mintMenu/applications.list	2015-04-05 19:02:39.903473856 -0600
+@@ -1,14 +1,14 @@
+ location:/usr/share/applications/firefox.desktop
+-location:/usr/share/applications/thunderbird.desktop
++location:/usr/share/applications/claws-mail.desktop
+ location:/usr/share/applications/pidgin.desktop
+-location:/usr/share/applications/banshee.desktop
++location:/usr/share/applications/exaile.desktop
++location:/usr/share/applications/totem.desktop
++location:/usr/share/applications/parole.desktop
+ separator
+-location:/usr/share/applications/mate-calc.desktop
+-location:/usr/share/applications/gcalctool.desktop
+-location:/usr/share/applications/pluma.desktop
+-location:/usr/share/applications/gedit.desktop
++location:/usr/share/applications/galculator.desktop
++location:/usr/share/applications/leafpad.desktop
++location:/usr/share/applications/geany.desktop
+ location:/usr/share/applications/mate-terminal.desktop
+-location:/usr/share/applications/gnome-terminal.desktop
+ location:/usr/share/applications/mate-volume-control.desktop
+ location:/usr/share/applications/xfce4-mixer.desktop
+ separator
+@@ -16,3 +16,4 @@ location:/usr/share/applications/mate-di
+ location:/usr/share/applications/xfce-display-settings.desktop
+ location:/usr/share/applications/mate-system-monitor.desktop
+ location:/usr/share/applications/xfce4-taskmanager.desktop
++location:/usr/share/applications/dconf-editor.desktop

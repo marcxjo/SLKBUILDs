@@ -1,0 +1,60 @@
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 18:12:10.841726942 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenuConfig.py	2015-04-05 18:24:05.143301182 -0600
+@@ -22,7 +22,7 @@ PATH = os.path.abspath( os.path.dirname(
+ sys.path.append( os.path.join( PATH , "plugins") )
+ 
+ # i18n
+-gettext.install("mintmenu", "/usr/share/linuxmint/locale")
++gettext.install("mintmenu", "/usr/share/locale")
+ 
+ from easygsettings import EasyGSettings
+ 
+diff -upr a/usr/lib/linuxmint/mintMenu/mintMenu.py b/usr/lib/linuxmint/mintMenu/mintMenu.py
+--- a/usr/lib/linuxmint/mintMenu/mintMenu.py	2015-04-05 18:12:10.841726942 -0600
++++ b/usr/lib/linuxmint/mintMenu/mintMenu.py	2015-04-05 18:24:04.547311470 -0600
+@@ -43,7 +43,7 @@ else:
+         libc.call('prctl', 15, 'mintmenu', 0, 0, 0)
+ 
+ # i18n
+-gettext.install("mintmenu", "/usr/share/linuxmint/locale")
++gettext.install("mintmenu", "/usr/share/locale")
+ 
+ NAME = _("Menu")
+ PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/applications.py b/usr/lib/linuxmint/mintMenu/plugins/applications.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 18:12:10.841726942 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/applications.py	2015-04-05 18:24:03.925322206 -0600
+@@ -31,7 +31,7 @@ import matemenu
+ from user import home
+ 
+ # i18n
+-gettext.install("mintmenu", "/usr/share/linuxmint/locale")
++gettext.install("mintmenu", "/usr/share/locale")
+ 
+ class PackageDescriptor():
+     def __init__(self, name, summary, description):
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/places.py b/usr/lib/linuxmint/mintMenu/plugins/places.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/places.py	2015-04-05 18:12:10.842726925 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/places.py	2015-04-05 18:24:03.311332805 -0600
+@@ -18,7 +18,7 @@ from urllib import unquote
+ gtk = CDLL("libgtk-x11-2.0.so.0")
+ 
+ # i18n
+-gettext.install("mintmenu", "/usr/share/linuxmint/locale")
++gettext.install("mintmenu", "/usr/share/locale")
+ 
+ class pluginclass( object ):
+ 
+diff -upr a/usr/lib/linuxmint/mintMenu/plugins/system_management.py b/usr/lib/linuxmint/mintMenu/plugins/system_management.py
+--- a/usr/lib/linuxmint/mintMenu/plugins/system_management.py	2015-04-05 17:32:03.233463772 -0600
++++ b/usr/lib/linuxmint/mintMenu/plugins/system_management.py	2015-04-05 18:24:02.559345785 -0600
+@@ -13,7 +13,7 @@ from execute import Execute
+ from easygsettings import EasyGSettings
+ 
+ # i18n
+-gettext.install("mintmenu", "/usr/share/linuxmint/locale")
++gettext.install("mintmenu", "/usr/share/locale")
+ 
+ class pluginclass( object ):
+ 

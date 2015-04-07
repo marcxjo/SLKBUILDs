@@ -1,0 +1,40 @@
+I'm not actually totally sure that Atheme Services strictly shouldn't be
+run as root, but I can think of a million reasons it's probably not a
+good idea. With that in mind, I suggest using the steps I usually use
+in setting up any web service daemon.
+
+We'll follow the example of thenktor's Prosody configuration to get
+things set up cleanly and logically.
+
+1. Create a user/group pair, both named 'atheme'. This user should be
+   a member of no group but 'atheme'; the group should have no user
+   other than 'atheme' as a member.
+2. Use the following commands to create additional needed directories:
+   mkdir -p -m750 /var/lib/atheme
+   mkdir -p -m750 /var/run/atheme
+   mkdir -p -m750 /var/log/atheme
+3. Adjust the permissions on these groups accordingly:
+   chown atheme:atheme /var/lib/atheme
+   chown atheme:atheme /var/run/atheme
+   chown atheme:atheme /var/log/atheme
+4. Finally, configure your installation by creating and appropriately
+   editing the file /etc/atheme/atheme.conf. The easiest way to do this
+   is to copy /etc/atheme/examples/atheme.conf.example up one directory,
+   edit it to your desired configuration, and remove the ".example"
+   suffix. (Keep in mind that there are other files to configure
+   from there, so this'll just give you the bare minimum to get
+   started... don't say I didn't warn you.)
+
+To make the first 3 steps easier, try the config-helper script included
+with this SLKBUILD. It handles all of those steps for you. Do note that,
+if you have already completed any (but not all) of the steps listed
+above, it will probably exit prematurely. At that point, you can either
+analyze the script and attempt to complete the remaining steps manually,
+or you can wait for me to stop slacking and set up every step as a
+conditional. Your mileage may vary if you choose the latter. ;-)
+
+This step seems kind of extraneous after all the pain of just setting up
+and IRCd (if you're using my InspIRCd SLKBUILD, you already know that),
+but this is one more gigantic step towards really perfecting the
+experience. Just remember, you're going to be the op of an IRC server
+after this. Who doesn't love a power trip every now and again? :-)

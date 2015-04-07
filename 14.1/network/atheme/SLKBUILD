@@ -1,0 +1,61 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+
+pkgname=atheme
+pkgver=7.0.7
+pkgrel=1mg
+source=("${pkgname}-services-${pkgver}.tar.bz2" "rc.atheme" "config-helper.sh" "README.Slackware" "atheme.logrotate")
+docs=('ABOUT-NLS' 'config-helper.sh' 'COPYING' 'GIT-Access' 'INSTALL' 'NEWS' 'TODO' 'README.md' 'README.Slackware')
+url=http://www.atheme.net/atheme.html
+options=('nosrcpack' 'noautodotnew')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"Atheme (A Portable and Secure IRC Services Platform)"
+"Atheme is a set of Services for IRC networks that allows users to"
+"manage their channels in a secure and efficient way and allows"
+"operators to manage various things about their networks. Unlike its"
+"predecessor, Shrike, services has a completely reworked form of"
+"channel management that feels somewhat like eggdrop and is somewhat"
+"more useful."
+""
+"Services currently works with many irc daemons. More details are"
+"available in the config file."
+)
+
+build() {
+	cd ${startdir}/src/${pkgname}-services-${pkgver}/
+
+	./configure \
+	--enable-fhs-paths \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX} \
+	--localstatedir=/var \
+	--sysconfdir=/etc/${pkgname} \
+	--mandir=/usr/man \
+	--with-cracklib \
+	--with-perl \
+	--with-pcre \
+	--enable-largefile \
+	--enable-large-net \
+	--enable-ssl \
+	--enable-contrib || return 1
+
+	make -j ${numjobs} || return 1
+
+	make install DESTDIR=${startdir}/pkg || return 1
+
+	# Remove the subdirs created under /var; 
+	# we create these by hand with the config-helper script.
+	rm -rf ${startdir}/pkg/var/lib/atheme/ || return 1
+	rm -rf ${startdir}/pkg/var/log/atheme/ || return 1
+	rm -rf ${startdir}/pkg/var/run/atheme/ || return 1
+
+	cd ${startdir}/src
+
+	# Install the init script:
+	install -D -m755 rc.atheme ${startdir}/pkg/etc/rc.d/rc.atheme || return 1
+
+	# Install the logrotate script:
+	install -Dm 644 atheme.logrotate ${startdir}/pkg/etc/logrotate.d/atheme || return 1
+}

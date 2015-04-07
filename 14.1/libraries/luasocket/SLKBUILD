@@ -1,0 +1,35 @@
+#Packager: Marĉjo GIVENS <marcxjo~ĉe~cerebralbleach~punkt~com>
+#Based largely on the SlackBuild by Andrew Tkalia		<anddt~ĉe~yandex~punkt~ru>
+#and the SLKBUILD by Thorsten Muehlfelder				<thenktor~ĉe~gmx~punkt~de>
+#with revisions and helpful advice by Marco Cirillo		<maranda~ĉe~lightwitch~punkt~org>
+
+pkgname=luasocket
+pkgver=20150407
+pkgrel=1mg
+arch=i486
+source=("$pkgname-$pkgver.src.tar.gz")
+url=https://github.com/diegonehab/luasocket
+options=("nosrcpack")
+docs=('NEW' 'README' 'TODO' 'WISH')
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"LuaSocket (Network Support for the Lua language)"
+"LuaSocket is a Lua extension library that is composed by two parts: a"
+"C core that provides support for the TCP and UDP transport layers, and"
+"a set of Lua modules that add support for functionality commonly"
+"needed by applications that deal with the Internet."
+)
+
+build() {
+	cd $startdir/src/$pkgname/
+	sed -i "s#LUAPREFIX_linux?=/usr/local#LUAPREFIX_linux?=/usr#" src/makefile || return 1
+	sed -i "s#\ -O2\ #\ -O2\ -march=i486\ -mtune=i686\ #" src/makefile || return 1
+
+	make \
+	PLAT=linux \
+	-j $numjobs || return 1
+
+	make install DESTDIR=$startdir/pkg || return 1
+}
