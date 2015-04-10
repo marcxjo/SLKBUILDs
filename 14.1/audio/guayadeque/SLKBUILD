@@ -18,7 +18,7 @@ slackdesc=\
 )
 
 build() {
-	cd ${startdir}/src/${pkgname}/
+	cd ${startdir}/src/${pkgname}-${pkgver}/
 	./buildt || return 1
 	cmake \
 	-DCMAKE_BUILD_TYPE=Release \

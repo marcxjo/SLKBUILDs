@@ -28,17 +28,6 @@ doinst() {
 if [ -x usr/bin/glib-compile-schemas ]; then
 	/usr/bin/glib-compile-schemas usr/share/glib-2.0/schemas
 fi
-
-# Salix branding
-for x in icon mintMenu visualisation-logo
-do
-	ln -sf /usr/share/icons/hicolor/22x22/apps/salix.png usr/share/linuxmint/mintMenu/$x.png
-done
-
-for y in icon mint-logo
-do
-	ln -sf /usr/share/icons/hicolor/scalable/apps/salix.svg usr/share/linuxmint/mintMenu/$y.svg
-done
 }
 
 slackdesc=\
@@ -102,6 +91,17 @@ build() {
 	# the first place. It shouldn't be too hard to patch for Slapt
 	# tools, but that's left as an exercise for the reader.
 	patch -p1 <salix-mintmenu_remove_uninstall-entry.patch || exit 1
+
+	# Add Salix branding.
+	for x in icon mintMenu visualisation-logo
+	do
+		ln -sf /usr/share/icons/hicolor/22x22/apps/salix.png usr/lib/linuxmint/mintMenu/$x.png || exit 1
+	done
+
+	for y in icon mint-logo
+	do
+		ln -sf /usr/share/icons/hicolor/scalable/apps/salix.svg usr/lib/linuxmint/mintMenu/$y.svg || exit 1
+	done
 
 	# Create the directory tree for the package.
 	install -d -p $startdir/pkg/usr/bin/ || exit 1
